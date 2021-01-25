@@ -329,7 +329,7 @@ class SwipeController: NSObject {
     }
     
     func configure() {
-        guard let panGestureRecognizer = self.panGestureRecognizer else { return }
+        guard delegate != nil, let panGestureRecognizer = self.panGestureRecognizer else { return }
         swipeable?.addGestureRecognizer(tapGestureRecognizer)
         swipeable?.addGestureRecognizer(panGestureRecognizer)
     }
