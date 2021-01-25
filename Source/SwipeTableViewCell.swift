@@ -26,12 +26,12 @@ open class SwipeTableViewCell: UITableViewCell {
     var indexPath: IndexPath? {
         return tableView?.indexPath(for: self)
     }
-    var panGestureRecognizer: UIGestureRecognizer
+    var panGestureRecognizer: UIGestureRecognizer?
     {
-        return swipeController.panGestureRecognizer;
+        return swipeController?.panGestureRecognizer
     }
     
-    var swipeController: SwipeController!
+    var swipeController: SwipeController?
     var isPreviouslySelected = false
     
     weak var tableView: UITableView?
@@ -45,7 +45,12 @@ open class SwipeTableViewCell: UITableViewCell {
     /// :nodoc:
     open override var layoutMargins: UIEdgeInsets {
         get {
-            return frame.origin.x != 0 ? swipeController.originalLayoutMargins : super.layoutMargins
+            guard frame.origin.x == 0,
+                  let originalLayoutMargins = swipeController?.originalLayoutMargins
+            else {
+                return super.layoutMargins
+            }
+            return originalLayoutMargins
         }
         set {
             super.layoutMargins = newValue
@@ -74,7 +79,7 @@ open class SwipeTableViewCell: UITableViewCell {
         clipsToBounds = false
         
         swipeController = SwipeController(swipeable: self, actionsContainerView: self)
-        swipeController.delegate = self
+        swipeController?.delegate = self
     }
     
     /// :nodoc:
@@ -96,7 +101,7 @@ open class SwipeTableViewCell: UITableViewCell {
             if let tableView = view as? UITableView {
                 self.tableView = tableView
 
-                swipeController.scrollView = tableView;
+                swipeController?.scrollView = tableView;
                 
                 tableView.panGestureRecognizer.removeTarget(self, action: nil)
                 tableView.panGestureRecognizer.addTarget(self, action: #selector(handleTablePan(gesture:)))
@@ -148,14 +153,14 @@ open class SwipeTableViewCell: UITableViewCell {
     
     /// :nodoc:
     override open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return swipeController.gestureRecognizerShouldBegin(gestureRecognizer)
+        return swipeController?.gestureRecognizerShouldBegin(gestureRecognizer) ?? false
     }
     
     /// :nodoc:
     open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         
-        swipeController.traitCollectionDidChange(from: previousTraitCollection, to: self.traitCollection)
+        swipeController?.traitCollectionDidChange(from: previousTraitCollection, to: self.traitCollection)
     }
     
     @objc func handleTablePan(gesture: UIPanGestureRecognizer) {
@@ -165,7 +170,7 @@ open class SwipeTableViewCell: UITableViewCell {
     }
     
     func reset() {
-        swipeController.reset()
+        swipeController?.reset()
         clipsToBounds = false
     }
     

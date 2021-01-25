@@ -42,7 +42,7 @@ class SwipeController: NSObject {
     var scrollRatio: CGFloat = 1.0
     var originalLayoutMargins: UIEdgeInsets = .zero
     
-    lazy var panGestureRecognizer: UIPanGestureRecognizer = {
+    lazy var panGestureRecognizer: UIPanGestureRecognizer? = {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(gesture:)))
         gesture.delegate = self
         return gesture
@@ -329,6 +329,7 @@ class SwipeController: NSObject {
     }
     
     func configure() {
+        guard let panGestureRecognizer = self.panGestureRecognizer else { return }
         swipeable?.addGestureRecognizer(tapGestureRecognizer)
         swipeable?.addGestureRecognizer(panGestureRecognizer)
     }
@@ -351,9 +352,9 @@ extension SwipeController: UIGestureRecognizerDelegate {
             
             let swipedCell = scrollView?.swipeables.first(where: {
                 $0.state.isActive ||
-                    $0.panGestureRecognizer.state == .began ||
-                    $0.panGestureRecognizer.state == .changed ||
-                    $0.panGestureRecognizer.state == .ended
+                    $0.panGestureRecognizer?.state == .began ||
+                    $0.panGestureRecognizer?.state == .changed ||
+                    $0.panGestureRecognizer?.state == .ended
             })
             return swipedCell == nil ? false : true
         }
@@ -418,7 +419,7 @@ extension SwipeController: SwipeActionsViewDelegate {
             case .delete:
                 actionsContainerView.mask = actionsView.createDeletionMask()
                 
-                self.delegate?.swipeController(self, didDeleteSwipeableAt: indexPath)
+                //self.delegate?.swipeController(self, didDeleteSwipeableAt: indexPath)
                 
                 UIView.animate(withDuration: 0.3, animations: {
                     guard let actionsContainerView = self.actionsContainerView else { return }

@@ -20,7 +20,7 @@ protocol Swipeable {
     
     var indexPath: IndexPath? { get }
     
-    var panGestureRecognizer: UIGestureRecognizer { get }
+    var panGestureRecognizer: UIGestureRecognizer? { get }
 }
 
 extension SwipeTableViewCell: Swipeable {}
