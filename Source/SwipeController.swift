@@ -31,12 +31,12 @@ class SwipeController: NSObject {
     weak var swipeable: (UIView & Swipeable)?
     weak var actionsContainerView: UIView?
     
-    weak var delegate: SwipeControllerDelegate?
-    weak var scrollView: UIScrollView? {
+    weak var delegate: SwipeControllerDelegate? {
         didSet {
             configure()
         }
     }
+    weak var scrollView: UIScrollView?
     
     var animator: SwipeAnimator?
     
