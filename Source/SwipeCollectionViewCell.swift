@@ -108,8 +108,10 @@ open class SwipeCollectionViewCell: UICollectionViewCell {
             ])
         }
         
-        swipeController = SwipeController(swipeable: self, actionsContainerView: contentView)
-        swipeController?.delegate = self
+        if delegate != nil {
+            swipeController = SwipeController(swipeable: self, actionsContainerView: contentView)
+            swipeController?.delegate = self
+        }
     }
     
     /// :nodoc:
