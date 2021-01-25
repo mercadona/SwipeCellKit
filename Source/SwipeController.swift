@@ -32,7 +32,11 @@ class SwipeController: NSObject {
     weak var actionsContainerView: UIView?
     
     weak var delegate: SwipeControllerDelegate?
-    weak var scrollView: UIScrollView?
+    weak var scrollView: UIScrollView? {
+        didSet {
+            configure()
+        }
+    }
     
     var animator: SwipeAnimator?
     
@@ -59,8 +63,6 @@ class SwipeController: NSObject {
         self.actionsContainerView = actionsContainerView
         
         super.init()
-        
-        configure()
     }
 
     @objc func handlePan(gesture: UIPanGestureRecognizer) {
